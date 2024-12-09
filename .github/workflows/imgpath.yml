@@ -20,7 +20,7 @@ jobs:
 
     - name: Find all image files and generate img.txt
       run: |
-        find . -type f \( -name "*.webp" \) | sed 's|^\./||' > img.txt
+        find . -type f \( -name "*.webp" -o -name "*.avif" \) | sed 's|^\./||' > img.txt
 
     - name: Commit and push changes
       run: |
