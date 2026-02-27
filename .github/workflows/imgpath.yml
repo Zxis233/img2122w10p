@@ -1,0 +1,33 @@
+name: Generate img.txt
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  generate-img-txt:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Find all image files and generate img.txt
+      run: |
+        find . -type f \( -name "*.webp" -o -name "*.avif" \) | sed 's|^\./||' > img.txt
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add img.txt
+        git commit -m 'Auto-generate img.txt with all image paths'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
